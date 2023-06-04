@@ -1,40 +1,13 @@
 /*  
     Скрипт считывателя Agylam
     Автор: MIMBOL
-    Задачи:
-        1) Выдача подписи устройства
-        2) Чтение карт и выдача AUTH токенов
-        3) Ping-pong
-        4) Управление пищалкой
-        5) Получение ID устройства
-        6) Отмена чтения карты
-    Команды:
-        1) CARD_READ - Чтение карты
-            Параметры:
-                1) PCRandom - Случайное число для подписи от ПК
-            Возможные ошибки:
-                1) EPCRandomEmptyOrZero - PCRandom пуст или равен 0
-        2) CARD_CANCEL - Отмена чтения карты
-        3) TONE_ON - Включение пищалки
-        4) TONE_OFF - Выключение пищалки
-        5) GET_ID - Получение ID устройства
-    Ответы:
-        1) O - ОК
-        2) C - Карта
-            Параметры:
-                1) UID - UID карты
-                2) PCRandom - Случайное число для подписи от ПК
-                3) ARRandom - Случайное число для подписи от Ардуино
-                4) Sign - Подпись
-    Возможные ошибки:
-        1) EPCRandomEmptyOrZero - PCRandom пуст или равен 0
-        2) EUNK_CMD - Неизвестная команда
 */
 
 // Настройки
 
-#define SECREY_KEY "kVzfCpP$X5NtyDE#XRV7Mg8gJfR5R6Ms" // Секретный ключ устройства
-#define DEVICE_ID "YLSRXZ646SQH23VX" // ID устройства
+#define SECREY_KEY "*IR^DOGG4!YXmw7I09CXXBsTE^dBZxoz" // Секретный ключ устройства
+#define DEVICE_ID "6c299457-568e-4009-a3c4-505e4c82e81b" // ID устройства
+#define VERSION_HARDWARE "v1.1"
 #define TONE_PIN 8 // Пин пищалки
 #define RST_PIN 9 // Пин сброса
 #define SS_PIN 10 // Пин выбора устройства
@@ -94,7 +67,6 @@ void sendUID(char* UID){ // Отправка UID
     Serial.print("C"); // Отправка ответа
     Serial.print(UID);
     Serial.print(":");
-    Serial.print(PCRandom);
     Serial.print(ARrandom);
     Serial.print(":");
     Serial.println(sign);
@@ -159,7 +131,11 @@ void loop() {
             toneActive = false;
             Serial.println("O");
         }else if (cmd == "GET_ID"){ // Получение ID устройства
+            Serial.print("I");
             Serial.println(DEVICE_ID);
+        }else if (cmd == "GET_VERSION"){
+            Serial.print("V");
+            Serial.println(VERSION_HARDWARE);
         }else{
             Serial.println("EUNK_CMD"); // Ошибка: неизвестная команда
         }
